@@ -1,0 +1,11 @@
+PASTE YOUR BLOG POSTS HERE
+
+Please paste all your blog posts in this file. I'll then use this content to build your blog website.
+
+Format each post like this:
+
+TITLE: [Post Title]
+DATE: [Date]
+CONTENT: [Your blog post content here]
+
+---
