@@ -140,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const posts = document.querySelectorAll('.blog-post');
     const usedIds = new Set();
+    const tocItems = [];
     posts.forEach(post => {
         // Preserve existing id if present
         let id = post.id && post.id.trim() ? post.id.trim() : '';
@@ -177,7 +178,64 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             titleEl.appendChild(link);
         }
+
+        // Make the entire title clickable (without duplicating if already wrapped)
+        if (titleEl && !titleEl.querySelector('a.title-link')) {
+            // Preserve existing text content (excluding the permalink we just added)
+            const permalinkEl = titleEl.querySelector('.permalink');
+            const titleText = Array.from(titleEl.childNodes)
+                .filter(n => n.nodeType === Node.TEXT_NODE && n.textContent.trim().length > 0)
+                .map(n => n.textContent)
+                .join(' ')
+                .trim();
+
+            if (titleText) {
+                // Remove text nodes
+                Array.from(titleEl.childNodes).forEach(n => {
+                    if (n.nodeType === Node.TEXT_NODE && n.textContent.trim().length > 0) {
+                        titleEl.removeChild(n);
+                    }
+                });
+                const titleLink = document.createElement('a');
+                titleLink.href = '#' + id;
+                titleLink.className = 'title-link';
+                titleLink.textContent = titleText;
+                titleEl.insertBefore(titleLink, permalinkEl || null);
+            }
+        }
+
+        // Collect for TOC
+        const titleForToc = (titleEl && (titleEl.querySelector('a.title-link')?.textContent || titleEl.textContent) || '').trim();
+        if (titleForToc) {
+            tocItems.push({ id, title: titleForToc });
+        }
     });
+
+    // Build and insert a table of contents above the posts list
+    if (tocItems.length > 0) {
+        const firstPost = posts[0];
+        if (firstPost && firstPost.parentNode) {
+            const toc = document.createElement('nav');
+            toc.className = 'posts-toc';
+            toc.setAttribute('aria-label', 'Posts table of contents');
+            const heading = document.createElement('h4');
+            heading.className = 'toc-heading';
+            heading.textContent = 'Browse Entries';
+            const list = document.createElement('ul');
+            list.className = 'toc-list';
+            tocItems.forEach(item => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = '#' + item.id;
+                a.textContent = item.title;
+                li.appendChild(a);
+                list.appendChild(li);
+            });
+            toc.appendChild(heading);
+            toc.appendChild(list);
+            firstPost.parentNode.insertBefore(toc, firstPost);
+        }
+    }
 
     // If page opened with a hash, smoothly scroll to it
     if (window.location.hash) {

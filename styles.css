@@ -451,6 +451,47 @@ body {
     color: #555;
 }
 
+/* Clickable title link */
+.post-title .title-link {
+    color: inherit;
+    text-decoration: none;
+}
+.post-title .title-link:hover {
+    text-decoration: underline;
+}
+
+/* Table of contents for posts */
+.posts-toc {
+    background: #f8f9fb;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin: 2rem 0 2.5rem;
+}
+.posts-toc .toc-heading {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #555;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+.posts-toc .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.5rem 1rem;
+}
+.posts-toc .toc-list a {
+    color: #334155;
+    text-decoration: none;
+}
+.posts-toc .toc-list a:hover {
+    text-decoration: underline;
+}
+
 .post-excerpt {
     font-size: 1.2rem;
     color: #666;
