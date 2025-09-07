@@ -356,7 +356,7 @@ function replyToComment(postId, commentId) {
 // Load comments when page loads
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize comments for all posts
-    const postIds = ['monero-post', 'darkweb-post', 'bitcoin-post', 'revolution-post', 'fingerprints-post', 'forensics-post', 'obfuscation-post', 'lazarus-post', 'stuxnet-post', 'decentralization-post'];
+    const postIds = ['vanish88-post', 'monero-post', 'darkweb-post', 'bitcoin-post', 'revolution-post', 'fingerprints-post', 'forensics-post', 'obfuscation-post', 'lazarus-post', 'stuxnet-post', 'decentralization-post'];
     
     postIds.forEach(postId => {
         displayComments(postId);
