@@ -127,6 +127,65 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     `;
     document.head.appendChild(style);
+
+    // Generate per-post permalinks and IDs
+    function slugify(text) {
+        return text.toString()
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-');
+    }
+
+    const posts = document.querySelectorAll('.blog-post');
+    const usedIds = new Set();
+    posts.forEach(post => {
+        // Preserve existing id if present
+        let id = post.id && post.id.trim() ? post.id.trim() : '';
+
+        if (!id) {
+            const titleEl = post.querySelector('.post-title');
+            const fallbackTitle = 'post';
+            let base = slugify(titleEl ? titleEl.textContent : fallbackTitle) || fallbackTitle;
+            // Ensure starts with letter for nicer hashes
+            if (!/^[a-z]/.test(base)) base = 'post-' + base;
+
+            id = base;
+            let suffix = 2;
+            while (usedIds.has(id) || document.getElementById(id)) {
+                id = base + '-' + suffix++;
+            }
+            post.id = id;
+        }
+        usedIds.add(id);
+
+        // Inject a small permalink next to the title if not already present
+        const titleEl = post.querySelector('.post-title');
+        if (titleEl && !titleEl.querySelector('.permalink')) {
+            const link = document.createElement('a');
+            link.href = '#' + id;
+            link.className = 'permalink';
+            link.setAttribute('aria-label', 'Copy link to this post');
+            link.textContent = '#';
+            link.addEventListener('click', function(e) {
+                // Update URL and copy to clipboard
+                const url = window.location.origin + window.location.pathname + '#' + id;
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(url).catch(() => {});
+                }
+            });
+            titleEl.appendChild(link);
+        }
+    });
+
+    // If page opened with a hash, smoothly scroll to it
+    if (window.location.hash) {
+        const target = document.getElementById(window.location.hash.substring(1));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
 });
 
 // Theme Toggle Functionality

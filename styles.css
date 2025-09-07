@@ -437,6 +437,20 @@ body {
     color: #333;
 }
 
+/* Permalink styling next to post titles */
+.post-title .permalink {
+    margin-left: 0.5rem;
+    text-decoration: none;
+    color: #999;
+    font-weight: 600;
+    opacity: 0.6;
+    transition: opacity 0.2s ease, color 0.2s ease;
+}
+.post-title .permalink:hover {
+    opacity: 1;
+    color: #555;
+}
+
 .post-excerpt {
     font-size: 1.2rem;
     color: #666;
@@ -1291,6 +1305,11 @@ html {
 
 [data-theme="dark"] .post-title {
     color: var(--text-primary);
+}
+
+/* Offset for anchor scrolling so headings aren't hidden under navbar */
+:target {
+    scroll-margin-top: 90px;
 }
 
 [data-theme="dark"] .post-excerpt {
